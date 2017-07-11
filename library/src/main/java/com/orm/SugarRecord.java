@@ -132,6 +132,16 @@ public class SugarRecord {
         return find(type, null, null, null, orderBy, null);
     }
 
+
+    public static <T> T findFirst(Class<T> type, String whereClause, String... whereArgs) {
+        List<T> result = find(type, whereClause, whereArgs, null, null, null);
+        if (result.size() > 0) {
+            return result.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public static <T> T findById(Class<T> type, Long id) {
         List<T> list = find(type, "id=?", new String[]{String.valueOf(id)}, null, null, "1");
         if (list.isEmpty()) return null;
@@ -163,6 +173,10 @@ public class SugarRecord {
             return null;
         }
         return list.get(0);
+    }
+
+    public static <T> Iterator<T> findAllWithOrder(Class<T> type, String orderBy) {
+        return findAsIterator(type, null, null, null, orderBy, null);
     }
 
     public static <T> Iterator<T> findAll(Class<T> type) {
@@ -483,6 +497,8 @@ public class SugarRecord {
     public void setId(Long id) {
         this.id = id;
     }
+
+
 
     static class CursorIterator<E> implements Iterator<E> {
         Class<E> type;
